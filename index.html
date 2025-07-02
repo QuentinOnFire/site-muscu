@@ -20,6 +20,7 @@
             --light: #ecf0f1;
             --dark: #2c3e50;
             --success: #2ecc71;
+            --warning: #f39c12;
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
@@ -27,23 +28,45 @@
             background: linear-gradient(135deg, #1a2a3a, #2c3e50);
             color: var(--light);
             min-height: 100vh;
+            padding-top: 120px;
             padding-bottom: 40px;
         }
         
         header {
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.85);
             padding: 20px;
             text-align: center;
             box-shadow: var(--shadow);
-            position: sticky;
+            position: fixed;
             top: 0;
-            z-index: 100;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: all 0.4s ease;
+        }
+        
+        header.shrink {
+            padding: 10px 20px;
+        }
+        
+        header.shrink h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        header.shrink .subtitle {
+            font-size: 0.9rem;
+            max-height: 0;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
         }
         
         h1 {
             color: var(--light);
             margin-bottom: 10px;
             font-size: 2.2rem;
+            transition: all 0.4s ease;
         }
         
         .subtitle {
@@ -51,6 +74,7 @@
             font-size: 1.1rem;
             max-width: 800px;
             margin: 0 auto;
+            transition: all 0.4s ease;
         }
         
         .container {
@@ -139,6 +163,8 @@
             margin-bottom: 15px;
             border-radius: 0 8px 8px 0;
             transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
         
         .exercise:hover {
@@ -174,6 +200,92 @@
             margin-top: 10px;
         }
         
+        .exercise-actions {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .record-btn {
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--light);
+            border: 1px solid var(--success);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .record-btn:hover {
+            background: var(--success);
+            transform: translateY(-2px);
+        }
+        
+        .previous-performance {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            font-size: 0.9rem;
+            flex: 1 1 100%;
+        }
+        
+        .previous-performance h4 {
+            color: var(--secondary);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .performance-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 8px;
+            margin-top: 5px;
+        }
+        
+        .performance-item {
+            background: rgba(52, 152, 219, 0.2);
+            padding: 5px;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        
+        .record-serie-btn {
+            background: rgba(243, 156, 18, 0.2);
+            color: var(--light);
+            border: 1px solid var(--warning);
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .record-serie-btn:hover {
+            background: var(--warning);
+            transform: translateY(-2px);
+        }
+        
+        .serie-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
         .protein-tracker {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -182,7 +294,7 @@
             box-shadow: var(--shadow);
             border: 1px solid rgba(255, 255, 255, 0.15);
             max-width: 600px;
-            margin: 0 auto;
+            margin: 40px auto 0;
         }
         
         .tracker-header {
@@ -312,6 +424,143 @@
             font-size: 0.95rem;
         }
         
+        .record-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: #2c3e50;
+            border-radius: 10px;
+            padding: 25px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
+            background: rgba(231, 76, 60, 0.2);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            background: var(--accent);
+            transform: rotate(90deg);
+        }
+        
+        .modal-title {
+            color: var(--secondary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .set-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .set-input {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .set-input label {
+            font-size: 0.9rem;
+            color: #bdc3c7;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .set-input input {
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .current-serie {
+            text-align: center;
+            margin-bottom: 15px;
+            color: var(--warning);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-btn.save {
+            background: var(--success);
+            color: white;
+        }
+        
+        .modal-btn.save:hover {
+            background: #27ae60;
+        }
+        
+        .modal-btn.cancel {
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+        
+        .modal-btn.cancel:hover {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .serie-recorded {
+            background: rgba(46, 204, 113, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px dashed var(--success);
+            text-align: center;
+        }
+        
+        .time-inputs {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
         @media (max-width: 768px) {
             .tabs {
                 flex-direction: column;
@@ -325,11 +574,23 @@
             .input-group {
                 flex-direction: column;
             }
+            
+            .set-inputs, .time-inputs {
+                grid-template-columns: 1fr;
+            }
+            
+            body {
+                padding-top: 100px;
+            }
+            
+            .serie-buttons {
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
+    <header id="main-header">
         <h1><i class="fas fa-dumbbell"></i> Mon Programme de Musculation</h1>
         <p class="subtitle">Programme 5 jours/semaine - Force sur Squat, Bench, Deadlift - Hypertrophie sur les autres groupes</p>
     </header>
@@ -370,6 +631,29 @@
                     <span>5 séries de 5 reps</span>
                     <span>Progression en charge</span>
                 </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Squat (Force)" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Squat (Force)" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Squat (Force)" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Squat (Force)" data-serie="4" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 4
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Squat (Force)" data-serie="5" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 5
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Squat (Force)">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
+                </div>
             </div>
             
             <div class="exercise">
@@ -380,6 +664,26 @@
                 <div class="exercise-details">
                     <span>4 séries de 8-12 reps</span>
                     <span>Hypertrophie</span>
+                </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Tirage Vertical Prise Large" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Tirage Vertical Prise Large" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Tirage Vertical Prise Large" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Tirage Vertical Prise Large" data-serie="4" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 4
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Tirage Vertical Prise Large">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
                 </div>
             </div>
             
@@ -392,6 +696,23 @@
                     <span>3 séries de 8-10 reps</span>
                     <span>Hypertrophie</span>
                 </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Développé Militaire" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Développé Militaire" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Développé Militaire" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Développé Militaire">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
+                </div>
             </div>
             
             <div class="exercise">
@@ -403,6 +724,23 @@
                     <span>3 séries de 10-12 reps</span>
                     <span>Hypertrophie</span>
                 </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Curl Biceps à la Barre" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Curl Biceps à la Barre" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Curl Biceps à la Barre" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Curl Biceps à la Barre">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
+                </div>
             </div>
             
             <div class="exercise">
@@ -413,6 +751,23 @@
                 <div class="exercise-details">
                     <span>3 séries de 12-15 reps</span>
                     <span>Hypertrophie</span>
+                </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Extensions Triceps à la Poulie Haute" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Extensions Triceps à la Poulie Haute" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Extensions Triceps à la Poulie Haute" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Extensions Triceps à la Poulie Haute">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -430,6 +785,29 @@
                     <span>5 séries de 5 reps</span>
                     <span>Progression en charge</span>
                 </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Bench Press (Force)" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Bench Press (Force)" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Bench Press (Force)" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Bench Press (Force)" data-serie="4" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 4
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Bench Press (Force)" data-serie="5" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 5
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Bench Press (Force)">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
+                </div>
             </div>
             
             <div class="exercise">
@@ -440,6 +818,26 @@
                 <div class="exercise-details">
                     <span>4 séries de 10-15 reps</span>
                     <span>Hypertrophie</span>
+                </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Leg Press" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Leg Press" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Leg Press" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Leg Press" data-serie="4" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 4
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Leg Press">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
                 </div>
             </div>
             
@@ -452,6 +850,23 @@
                     <span>3 séries de 12-15 reps</span>
                     <span>Hypertrophie</span>
                 </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Leg Curl Assis" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Leg Curl Assis" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Leg Curl Assis" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Leg Curl Assis">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
+                </div>
             </div>
             
             <div class="exercise">
@@ -463,6 +878,26 @@
                     <span>4 séries de 15-20 reps</span>
                     <span>Hypertrophie</span>
                 </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Mollets Debout" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Mollets Debout" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Mollets Debout" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Mollets Debout" data-serie="4" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 4
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Mollets Debout">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
+                </div>
             </div>
             
             <div class="exercise">
@@ -473,6 +908,23 @@
                 <div class="exercise-details">
                     <span>3 séries de 45-60 secondes</span>
                     <span>Endurance</span>
+                </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Planche Abdominale" data-serie="1" data-type="time">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Planche Abdominale" data-serie="2" data-type="time">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Planche Abdominale" data-serie="3" data-type="time">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Planche Abdominale">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -490,6 +942,23 @@
                     <span>3 séries de 3 reps</span>
                     <span>Progression en charge</span>
                 </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Deadlift (Force)" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Deadlift (Force)" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Deadlift (Force)" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Deadlift (Force)">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
+                </div>
             </div>
             
             <div class="exercise">
@@ -500,6 +969,26 @@
                 <div class="exercise-details">
                     <span>4 séries de 8-10 reps</span>
                     <span>Hypertrophie</span>
+                </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Rowing Barre Penché" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Rowing Barre Penché" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Rowing Barre Penché" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Rowing Barre Penché" data-serie="4" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 4
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Rowing Barre Penché">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
                 </div>
             </div>
             
@@ -512,6 +1001,23 @@
                     <span>3 séries de 12-15 reps</span>
                     <span>Hypertrophie</span>
                 </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Élévations Latérales Haltères" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Élévations Latérales Haltères" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Élévations Latérales Haltères" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Élévations Latérales Haltères">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
+                </div>
             </div>
             
             <div class="exercise">
@@ -523,6 +1029,23 @@
                     <span>3 séries de 15 reps</span>
                     <span>Hypertrophie</span>
                 </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Face Pull" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Face Pull" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Face Pull" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Face Pull">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
+                </div>
             </div>
             
             <div class="exercise">
@@ -533,6 +1056,26 @@
                 <div class="exercise-details">
                     <span>4 séries de 15 reps</span>
                     <span>Hypertrophie</span>
+                </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Crunch à la Poulie" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Crunch à la Poulie" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Crunch à la Poulie" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Crunch à la Poulie" data-serie="4" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 4
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Crunch à la Poulie">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -550,6 +1093,26 @@
                     <span>4 séries de 5 reps (80% du max)</span>
                     <span>Technique</span>
                 </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Squat Pause (3 sec. en bas)" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Squat Pause (3 sec. en bas)" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Squat Pause (3 sec. en bas)" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Squat Pause (3 sec. en bas)" data-serie="4" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 4
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Squat Pause (3 sec. en bas)">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
+                </div>
             </div>
             
             <div class="exercise">
@@ -560,6 +1123,26 @@
                 <div class="exercise-details">
                     <span>4 séries de 6-8 reps</span>
                     <span>Hypertrophie</span>
+                </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Bench Press Prise Serrée" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Bench Press Prise Serrée" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Bench Press Prise Serrée" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Bench Press Prise Serrée" data-serie="4" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 4
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Bench Press Prise Serrée">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
                 </div>
             </div>
             
@@ -572,6 +1155,23 @@
                     <span>3 séries de 10 reps</span>
                     <span>Hypertrophie</span>
                 </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Good Mornings" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Good Mornings" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Good Mornings" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Good Mornings">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
+                </div>
             </div>
             
             <div class="exercise">
@@ -583,6 +1183,23 @@
                     <span>3 séries max reps</span>
                     <span>Force</span>
                 </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Pull-Ups Prise Neutre" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Pull-Ups Prise Neutre" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Pull-Ups Prise Neutre" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Pull-Ups Prise Neutre">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
+                </div>
             </div>
             
             <div class="exercise">
@@ -593,6 +1210,23 @@
                 <div class="exercise-details">
                     <span>3 séries de 12 reps</span>
                     <span>Hypertrophie</span>
+                </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Élévations Frontales" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Élévations Frontales" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Élévations Frontales" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Élévations Frontales">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -610,6 +1244,26 @@
                     <span>4 séries de 10-12 reps</span>
                     <span>Hypertrophie</span>
                 </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Hack Squat" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Hack Squat" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Hack Squat" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Hack Squat" data-serie="4" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 4
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Hack Squat">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
+                </div>
             </div>
             
             <div class="exercise">
@@ -620,6 +1274,26 @@
                 <div class="exercise-details">
                     <span>4 séries de 10 reps</span>
                     <span>Hypertrophie</span>
+                </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Développé Incliné Haltères" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Développé Incliné Haltères" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Développé Incliné Haltères" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Développé Incliné Haltères" data-serie="4" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 4
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Développé Incliné Haltères">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
                 </div>
             </div>
             
@@ -632,6 +1306,23 @@
                     <span>3 séries de 12 reps</span>
                     <span>Hypertrophie</span>
                 </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Tirage Prise Marteau" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Tirage Prise Marteau" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Tirage Prise Marteau" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Tirage Prise Marteau">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
+                </div>
             </div>
             
             <div class="exercise">
@@ -642,6 +1333,23 @@
                 <div class="exercise-details">
                     <span>3 séries de 10-12 reps</span>
                     <span>Hypertrophie</span>
+                </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Curl Incliné" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Curl Incliné" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Curl Incliné" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Curl Incliné">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
                 </div>
             </div>
             
@@ -654,16 +1362,50 @@
                     <span>3 séries de 10-15 reps</span>
                     <span>Hypertrophie</span>
                 </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Dips" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Dips" data-serie="2" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Dips" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Dips">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
+                </div>
             </div>
             
             <div class="exercise">
                 <div class="exercise-title">
                     <span class="exercise-name">Soulevé de Terre Roumain</span>
-                    <span class="muscle-group">Ischios</span>
+                   极 <span class="muscle-group">Ischios</span>
                 </div>
                 <div class="exercise-details">
                     <span>3 séries de 12 reps</span>
                     <span>Hypertrophie</span>
+                </div>
+                
+                <div class="exercise-actions">
+                    <div class="serie-buttons">
+                        <button class="record-serie-btn" data-exercise="Soulevé de Terre Roumain" data-serie="1" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 1
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Soulevé de Terre Roumain" data-serie="2" data-type="reps">
+                            <i class="fas极 fa-dumbbell"></i> Série 2
+                        </button>
+                        <button class="record-serie-btn" data-exercise="Soulevé de Terre Roumain" data-serie="3" data-type="reps">
+                            <i class="fas fa-dumbbell"></i> Série 3
+                        </button>
+                    </div>
+                    <div class="previous-performance" data-exercise="Soulevé de Terre Roumain">
+                        <!-- Les performances précédentes seront injectées ici -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -688,7 +1430,54 @@
                 <div class="history-list" id="protein-history">
                     <!-- L'historique sera ajouté dynamiquement -->
                 </div>
-                <button class="reset-btn" id="reset-protein"><i class="fas fa-redo"></i> Réinitialiser pour aujourd'hui</button>
+            </div>
+            
+            <!-- Le bouton de réinitialisation placé correctement -->
+            <button class="reset-btn" id="reset-protein"><i class="fas fa-redo"></i> Réinitialiser pour aujourd'hui</button>
+        </div>
+    </div>
+
+    <!-- Modal pour enregistrer une série -->
+    <div class="record-modal" id="record-modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-modal">&times;</span>
+            <h2 class="modal-title" id="modal-exercise-name">Enregistrer une série</h2>
+            
+            <div class="current-serie" id="current-serie">
+                Série 1
+            </div>
+            
+            <!-- Champs pour les exercices normaux (poids et répétitions) -->
+            <div class="set-inputs" id="reps-fields">
+                <div class="set-input">
+                    <label for="set-weight"><i class="fas fa-weight-hanging"></i> Poids (kg)</label>
+                    <input type="number" id="set-weight" step="0.5" min="0" placeholder="kg">
+                </div>
+                <div class="set-input">
+                    <label for="set-reps"><i class="fas fa-sync-alt"></i> Répétitions</label>
+                    <input type="number" id="set-reps" min="0" placeholder="reps">
+                </div>
+            </div>
+            
+            <!-- Champs pour les exercices de temps (secondes) -->
+            <div class="time-inputs" id="time-fields" style="display: none;">
+                <div class="set-input">
+                    <label for="set-time"><i class="fas fa-clock"></i> Temps (secondes)</label>
+                    <input type="number" id="set-time" min="0" placeholder="secondes">
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn save" id="save-serie">
+                    <i class="fas fa-save"></i> Enregistrer cette série
+                </button>
+                <button class="modal-btn cancel" id="cancel-serie">
+                    <i class="fas fa-times"></i> Annuler
+                </button>
+            </div>
+            
+            <div id="serie-recorded-message" class="serie-recorded" style="display: none;">
+                <i class="fas fa-check-circle"></i> Série enregistrée avec succès!
             </div>
         </div>
     </div>
@@ -830,6 +1619,247 @@
                     saveProteinData();
                 }
             }
+            
+            // Système d'enregistrement des performances (série par série)
+            const recordSerieBtns = document.querySelectorAll('.record-serie-btn');
+            const recordModal = document.getElementById('record-modal');
+            const closeModal = document.getElementById('close-modal');
+            const modalExerciseName = document.getElementById('modal-exercise-name');
+            const currentSerie = document.getElementById('current-serie');
+            const setWeight = document.getElementById('set-weight');
+            const setReps = document.getElementById('set-reps');
+            const setTime = document.getElementById('set-time');
+            const saveSerieBtn = document.getElementById('save-serie');
+            const cancelSerieBtn = document.getElementById('cancel-serie');
+            const serieRecordedMessage = document.getElementById('serie-recorded-message');
+            const repsFields = document.getElementById('reps-fields');
+            const timeFields = document.getElementById('time-fields');
+            
+            let currentExercise = null;
+            let currentSerieNum = 0;
+            let currentExerciseType = 'reps';
+            
+            // Ouvrir le modal pour enregistrer une série
+            recordSerieBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentExercise = btn.getAttribute('data-exercise');
+                    currentSerieNum = parseInt(btn.getAttribute('data-serie'));
+                    currentExerciseType = btn.getAttribute('data-type');
+                    
+                    modalExerciseName.textContent = currentExercise;
+                    currentSerie.textContent = `Série ${currentSerieNum}`;
+                    
+                    // Afficher les champs appropriés
+                    if (currentExerciseType === 'time') {
+                        repsFields.style.display = 'none';
+                        timeFields.style.display = 'grid';
+                        
+                        // Charger les données existantes si disponibles
+                        const existingData = loadSerieData(currentExercise, currentSerieNum);
+                        setTime.value = existingData ? existingData.time : '';
+                    } else {
+                        repsFields.style.display = 'grid';
+                        timeFields.style.display = 'none';
+                        
+                        // Charger les données existantes si disponibles
+                        const existingData = loadSerieData(currentExercise, currentSerieNum);
+                        setWeight.value = existingData ? existingData.weight : '';
+                        setReps.value = existingData ? existingData.reps : '';
+                    }
+                    
+                    // Réinitialiser le message
+                    serieRecordedMessage.style.display = 'none';
+                    
+                    // Ouvrir le modal
+                    recordModal.style.display = 'flex';
+                });
+            });
+            
+            // Fermer le modal
+            closeModal.addEventListener('click', () => {
+                recordModal.style.display = 'none';
+            });
+            
+            // Fermer le modal en cliquant en dehors
+            window.addEventListener('click', (e) => {
+                if (e.target === recordModal) {
+                    recordModal.style.display = 'none';
+                }
+            });
+            
+            // Annuler l'enregistrement
+            cancelSerieBtn.addEventListener('click', () => {
+                recordModal.style.display = 'none';
+            });
+            
+            // Enregistrer une série
+            saveSerieBtn.addEventListener('click', () => {
+                let performanceData = {};
+                
+                if (currentExerciseType === 'time') {
+                    const time = parseInt(setTime.value);
+                    
+                    if (isNaN(time)) {
+                        alert('Veuillez entrer un temps valide');
+                        return;
+                    }
+                    
+                    if (time <= 0) {
+                        alert('Le temps doit être supérieur à zéro');
+                        return;
+                    }
+                    
+                    performanceData = {
+                        time: time
+                    };
+                } else {
+                    const weight = parseFloat(setWeight.value);
+                    const reps = parseInt(setReps.value);
+                    
+                    if (isNaN(weight)) {
+                        alert('Veuillez entrer un poids valide');
+                        return;
+                    }
+                    
+                    if (isNaN(reps)) {
+                        alert('Veuillez entrer un nombre de répétitions valide');
+                        return;
+                    }
+                    
+                    if (weight <= 0 || reps <= 0) {
+                        alert('Le poids et les répétitions doivent être supérieurs à zéro');
+                        return;
+                    }
+                    
+                    performanceData = {
+                        weight: weight,
+                        reps: reps
+                    };
+                }
+                
+                // Enregistrer la série
+                saveSerieData(currentExercise, currentSerieNum, performanceData);
+                
+                // Afficher un message de confirmation
+                serieRecordedMessage.style.display = 'block';
+                
+                // Fermer le modal après 1 seconde
+                setTimeout(() => {
+                    recordModal.style.display = 'none';
+                    serieRecordedMessage.style.display = 'none';
+                    
+                    // Mettre à jour l'affichage de la dernière performance
+                    updatePerformanceDisplay(currentExercise, currentExerciseType);
+                }, 1000);
+            });
+            
+            function saveSerieData(exercise, serie, data) {
+                let performances = JSON.parse(localStorage.getItem('workoutPerformances')) || {};
+                
+                if (!performances[exercise]) {
+                    performances[exercise] = {};
+                }
+                
+                performances[exercise][serie] = {
+                    ...data,
+                    date: new Date().toLocaleDateString('fr-FR'),
+                    time: new Date().toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'}),
+                    type: currentExerciseType
+                };
+                
+                localStorage.setItem('workoutPerformances', JSON.stringify(performances));
+            }
+            
+            function loadSerieData(exercise, serie) {
+                const performances = JSON.parse(localStorage.getItem('workoutPerformances')) || {};
+                
+                if (performances[exercise] && performances[exercise][serie]) {
+                    return performances[exercise][serie];
+                }
+                
+                return null;
+            }
+            
+            function updatePerformanceDisplay(exercise, type) {
+                const performanceElements = document.querySelectorAll(`.previous-performance[data-exercise="${exercise}"]`);
+                
+                const performances = JSON.parse(localStorage.getItem('workoutPerformances')) || {};
+                const exerciseData = performances[exercise] || {};
+                
+                // Trier les séries par numéro
+                const series = Object.keys(exerciseData)
+                    .map(serie => parseInt(serie))
+                    .sort((a, b) => a - b);
+                
+                if (series.length === 0) {
+                    performanceElements.forEach(element => {
+                        element.innerHTML = '<p>Aucune série enregistrée pour aujourd\'hui</p>';
+                    });
+                    return;
+                }
+                
+                performanceElements.forEach(element => {
+                    let performanceHTML = '';
+                    
+                    if (type === 'time') {
+                        performanceHTML = `
+                            <h4><i class="fas fa-history"></i> Performances d'aujourd'hui</h4>
+                            <div class="performance-list">
+                                ${series.map(serie => {
+                                    const data = exerciseData[serie];
+                                    return `
+                                        <div class="performance-item">
+                                            Série ${serie}: ${data.time} secondes
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        `;
+                    } else {
+                        performanceHTML = `
+                            <h4><i class="fas fa-history"></i> Performances d'aujourd'hui</h4>
+                            <div class="performance-list">
+                                ${series.map(serie => {
+                                    const data = exerciseData[serie];
+                                    return `
+                                        <div class="performance-item">
+                                            Série ${serie}: ${data.weight}kg × ${data.reps} reps
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        `;
+                    }
+                    
+                    element.innerHTML = performanceHTML;
+                });
+            }
+            
+            // Charger les performances au démarrage
+            function loadAllPerformances() {
+                const performances = JSON.parse(localStorage.getItem('workoutPerformances')) || {};
+                
+                for (const exercise in performances) {
+                    const firstSerie = Object.values(performances[exercise])[0];
+                    if (firstSerie) {
+                        updatePerformanceDisplay(exercise, firstSerie.type);
+                    }
+                }
+            }
+            
+            // En-tête réductible
+            const header = document.getElementById('main-header');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('shrink');
+                } else {
+                    header.classList.remove('shrink');
+                }
+            });
+            
+            // Charger les performances au démarrage
+            loadAllPerformances();
         });
     </script>
 </body>
