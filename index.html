@@ -28,20 +28,15 @@
             background: linear-gradient(135deg, #1a2a3a, #2c3e50);
             color: var(--light);
             min-height: 100vh;
-            padding-top: 100px;
             padding-bottom: 40px;
         }
         
         header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
             background: rgba(0, 0, 0, 0.85);
             padding: 15px 20px;
             text-align: center;
             box-shadow: var(--shadow);
+            margin-bottom: 20px;
         }
         
         h1 {
@@ -1828,17 +1823,6 @@
                     }
                 }
             }
-            
-            // En-tête réductible
-            const header = document.getElementById('main-header');
-            
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    header.classList.add('shrink');
-                } else {
-                    header.classList.remove('shrink');
-                }
-            });
             
             // Charger les performances au démarrage
             loadAllPerformances();
