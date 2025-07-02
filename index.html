@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Programme de Musculation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a3a, #2c3e50);
+            color: var(--light);
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+        
+        header {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        h1 {
+            color: var(--light);
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+        
+        .subtitle {
+            color: var(--secondary);
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 30px 0;
+        }
+        
+        .tab-btn {
+            background: rgba(52, 152, 219, 0.2);
+            border: 2px solid var(--secondary);
+            color: var(--light);
+            padding: 12px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tab-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+        }
+        
+        .tab-btn.active {
+            background: var(--secondary);
+            box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
+        }
+        
+        .tab-content {
+            display: none;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .session-title {
+            color: var(--secondary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .session-title i {
+            background: var(--primary);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .exercise {
+            background: rgba(44, 62, 80, 0.6);
+            border-left: 4px solid var(--secondary);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .exercise:hover {
+            transform: translateX(5px);
+        }
+        
+        .exercise-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .exercise-name {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--light);
+        }
+        
+        .muscle-group {
+            background: var(--accent);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .exercise-details {
+            display: flex;
+            justify-content: space-between;
+            color: #bdc3c7;
+            font-size: 0.95rem;
+            margin-top: 10px;
+        }
+        
+        .protein-tracker {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .tracker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .goal {
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--success);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .progress-container {
+            height: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary), var(--success));
+            border-radius: 15px;
+            width: 0%;
+            transition: width 0.8s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+        }
+        
+        input::placeholder {
+            color: #bdc3c7;
+        }
+        
+        button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .history {
+            margin-top: 20px;
+        }
+        
+        .history-title {
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .history-list {
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .reset-btn {
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            margin-top: 15px;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+        
+        .reset-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .date-display {
+            text-align: center;
+            color: #bdc3c7;
+            margin: 10px 0 25px;
+            font-size: 0.95rem;
+        }
+        
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-dumbbell"></i> Mon Programme de Musculation</h1>
+        <p class="subtitle">Programme 5 jours/semaine - Force sur Squat, Bench, Deadlift - Hypertrophie sur les autres groupes</p>
+    </header>
+    
+    <div class="container">
+        <div class="date-display" id="current-date">
+            <!-- Date actuelle sera injectée par JS -->
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-day="lundi">
+                <i class="fas fa-calendar-day"></i> Lundi
+            </button>
+            <button class="tab-btn" data-day="mardi">
+                <i class="fas fa-calendar-day"></i> Mardi
+            </button>
+            <button class="tab-btn" data-day="jeudi">
+                <i class="fas fa-calendar-day"></i> Jeudi
+            </button>
+            <button class="tab-btn" data-day="vendredi">
+                <i class="fas fa-calendar-day"></i> Vendredi
+            </button>
+            <button class="tab-btn" data-day="samedi">
+                <i class="fas fa-calendar-day"></i> Samedi
+            </button>
+        </div>
+        
+        <!-- Lundi -->
+        <div id="lundi" class="tab-content active">
+            <h2 class="session-title"><i class="fas fa-fire"></i> Séance du Lundi : Squat (Force) + Haut du Corps</h2>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Squat (Force)</span>
+                    <span class="muscle-group">Jambes</span>
+                </div>
+                <div class="exercise-details">
+                    <span>5 séries de 5 reps</span>
+                    <span>Progression en charge</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Tirage Vertical Prise Large</span>
+                    <span class="muscle-group">Dos</span>
+                </div>
+                <div class="exercise-details">
+                    <span>4 séries de 8-12 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Développé Militaire</span>
+                    <span class="muscle-group">Épaules</span>
+                </div>
+                <div class="exercise-details">
+                    <span>3 séries de 8-10 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Curl Biceps à la Barre</span>
+                    <span class="muscle-group">Biceps</span>
+                </div>
+                <div class="exercise-details">
+                    <span>3 séries de 10-12 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Extensions Triceps à la Poulie Haute</span>
+                    <span class="muscle-group">Triceps</span>
+                </div>
+                <div class="exercise-details">
+                    <span>3 séries de 12-15 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mardi -->
+        <div id="mardi" class="tab-content">
+            <h2 class="session-title"><i class="fas fa-fire"></i> Séance du Mardi : Bench Press (Force) + Bas du Corps</h2>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Bench Press (Force)</span>
+                    <span class="muscle-group">Pectoraux</span>
+                </div>
+                <div class="exercise-details">
+                    <span>5 séries de 5 reps</span>
+                    <span>Progression en charge</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Leg Press</span>
+                    <span class="muscle-group">Quadriceps</span>
+                </div>
+                <div class="exercise-details">
+                    <span>4 séries de 10-15 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Leg Curl Assis</span>
+                    <span class="muscle-group">Ischios</span>
+                </div>
+                <div class="exercise-details">
+                    <span>3 séries de 12-15 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Mollets Debout</span>
+                    <span class="muscle-group">Mollets</span>
+                </div>
+                <div class="exercise-details">
+                    <span>4 séries de 15-20 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Planche Abdominale</span>
+                    <span class="muscle-group">Abdominaux</span>
+                </div>
+                <div class="exercise-details">
+                    <span>3 séries de 45-60 secondes</span>
+                    <span>Endurance</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Jeudi -->
+        <div id="jeudi" class="tab-content">
+            <h2 class="session-title"><i class="fas fa-fire"></i> Séance du Jeudi : Deadlift (Force) + Dos/Épaules</h2>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Deadlift (Force)</span>
+                    <span class="muscle-group">Dos/Jambes</span>
+                </div>
+                <div class="exercise-details">
+                    <span>3 séries de 3 reps</span>
+                    <span>Progression en charge</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Rowing Barre Penché</span>
+                    <span class="muscle-group">Dos</span>
+                </div>
+                <div class="exercise-details">
+                    <span>4 séries de 8-10 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Élévations Latérales Haltères</span>
+                    <span class="muscle-group">Épaules</span>
+                </div>
+                <div class="exercise-details">
+                    <span>3 séries de 12-15 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Face Pull</span>
+                    <span class="muscle-group">Arrière d'épaules</span>
+                </div>
+                <div class="exercise-details">
+                    <span>3 séries de 15 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Crunch à la Poulie</span>
+                    <span class="muscle-group">Abdominaux</span>
+                </div>
+                <div class="exercise-details">
+                    <span>4 séries de 15 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Vendredi -->
+        <div id="vendredi" class="tab-content">
+            <h2 class="session-title"><i class="fas fa-fire"></i> Séance du Vendredi : Force Technique + Complémentaire</h2>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Squat Pause (3 sec. en bas)</span>
+                    <span class="muscle-group">Jambes</span>
+                </div>
+                <div class="exercise-details">
+                    <span>4 séries de 5 reps (80% du max)</span>
+                    <span>Technique</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Bench Press Prise Serrée</span>
+                    <span class="muscle-group">Triceps/Pectoraux</span>
+                </div>
+                <div class="exercise-details">
+                    <span>4 séries de 6-8 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Good Mornings</span>
+                    <span class="muscle-group">Chaînes Postérieures</span>
+                </div>
+                <div class="exercise-details">
+                    <span>3 séries de 10 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Pull-Ups Prise Neutre</span>
+                    <span class="muscle-group">Dos</span>
+                </div>
+                <div class="exercise-details">
+                    <span>3 séries max reps</span>
+                    <span>Force</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Élévations Frontales</span>
+                    <span class="muscle-group">Épaules</span>
+                </div>
+                <div class="exercise-details">
+                    <span>3 séries de 12 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Samedi -->
+        <div id="samedi" class="tab-content">
+            <h2 class="session-title"><i class="fas fa-fire"></i> Séance du Samedi : Hypertrophie Globale</h2>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Hack Squat</span>
+                    <span class="muscle-group">Quadriceps</span>
+                </div>
+                <div class="exercise-details">
+                    <span>4 séries de 10-12 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Développé Incliné Haltères</span>
+                    <span class="muscle-group">Pectoraux</span>
+                </div>
+                <div class="exercise-details">
+                    <span>4 séries de 10 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Tirage Prise Marteau</span>
+                    <span class="muscle-group">Dos</span>
+                </div>
+                <div class="exercise-details">
+                    <span>3 séries de 12 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Curl Incliné</span>
+                    <span class="muscle-group">Biceps</span>
+                </div>
+                <div class="exercise-details">
+                    <span>3 séries de 10-12 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Dips</span>
+                    <span class="muscle-group">Triceps/Pecs</span>
+                </div>
+                <div class="exercise-details">
+                    <span>3 séries de 10-15 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <div class="exercise-title">
+                    <span class="exercise-name">Soulevé de Terre Roumain</span>
+                    <span class="muscle-group">Ischios</span>
+                </div>
+                <div class="exercise-details">
+                    <span>3 séries de 12 reps</span>
+                    <span>Hypertrophie</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="protein-tracker">
+            <div class="tracker-header">
+                <h2><i class="fas fa-egg"></i> Suivi des Protéines</h2>
+                <div class="goal">Objectif: 140g/jour</div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="protein-progress">0g</div>
+            </div>
+            
+            <div class="input-group">
+                <input type="number" id="protein-input" placeholder="Quantité de protéines (g)" min="1">
+                <button id="add-protein"><i class="fas fa-plus"></i> Ajouter</button>
+            </div>
+            
+            <div class="history">
+                <h3 class="history-title"><i class="fas fa-history"></i> Historique d'aujourd'hui</h3>
+                <div class="history-list" id="protein-history">
+                    <!-- L'historique sera ajouté dynamiquement -->
+                </div>
+                <button class="reset-btn" id="reset-protein"><i class="fas fa-redo"></i> Réinitialiser pour aujourd'hui</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Afficher la date actuelle
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('fr-FR', options);
+            
+            // Gestion des onglets
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Désactiver tous les onglets
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Activer l'onglet sélectionné
+                    btn.classList.add('active');
+                    const day = btn.getAttribute('data-day');
+                    document.getElementById(day).classList.add('active');
+                });
+            });
+            
+            // Tracker de protéines
+            const PROTEIN_GOAL = 140;
+            let proteinTotal = 0;
+            const proteinHistory = [];
+            
+            // Éléments DOM
+            const proteinInput = document.getElementById('protein-input');
+            const addProteinBtn = document.getElementById('add-protein');
+            const proteinProgress = document.getElementById('protein-progress');
+            const proteinHistoryList = document.getElementById('protein-history');
+            const resetProteinBtn = document.getElementById('reset-protein');
+            
+            // Charger les données depuis localStorage
+            loadProteinData();
+            
+            // Mettre à jour la barre de progression
+            updateProteinProgress();
+            
+            // Ajouter des protéines
+            addProteinBtn.addEventListener('click', addProtein);
+            proteinInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addProtein();
+                }
+            });
+            
+            // Réinitialiser
+            resetProteinBtn.addEventListener('click', resetProtein);
+            
+            function addProtein() {
+                const amount = parseInt(proteinInput.value);
+                
+                if (isNaN(amount)) {
+                    alert('Veuillez entrer une quantité valide');
+                    return;
+                }
+                
+                if (amount <= 0) {
+                    alert('La quantité doit être supérieure à zéro');
+                    return;
+                }
+                
+                proteinTotal += amount;
+                proteinHistory.push({
+                    amount: amount,
+                    time: new Date().toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'})
+                });
+                
+                updateProteinProgress();
+                saveProteinData();
+                proteinInput.value = '';
+            }
+            
+            function updateProteinProgress() {
+                const percentage = Math.min(100, (proteinTotal / PROTEIN_GOAL) * 100);
+                proteinProgress.style.width = `${percentage}%`;
+                proteinProgress.textContent = `${proteinTotal}g`;
+                
+                // Mettre à jour l'historique
+                proteinHistoryList.innerHTML = '';
+                
+                if (proteinHistory.length === 0) {
+                    proteinHistoryList.innerHTML = '<p class="empty-history">Aucun apport enregistré aujourd\'hui</p>';
+                } else {
+                    proteinHistory.forEach(item => {
+                        const historyItem = document.createElement('div');
+                        historyItem.className = 'history-item';
+                        historyItem.innerHTML = `
+                            <span>${item.time}</span>
+                            <span>${item.amount}g</span>
+                        `;
+                        proteinHistoryList.appendChild(historyItem);
+                    });
+                }
+            }
+            
+            function saveProteinData() {
+                const today = new Date().toLocaleDateString('fr-FR');
+                const data = {
+                    date: today,
+                    total: proteinTotal,
+                    history: proteinHistory
+                };
+                localStorage.setItem('proteinTracker', JSON.stringify(data));
+            }
+            
+            function loadProteinData() {
+                const today = new Date().toLocaleDateString('fr-FR');
+                const savedData = localStorage.getItem('proteinTracker');
+                
+                if (savedData) {
+                    const data = JSON.parse(savedData);
+                    
+                    // Si les données sont pour aujourd'hui, les charger
+                    if (data.date === today) {
+                        proteinTotal = data.total;
+                        proteinHistory.length = 0; // Vider le tableau
+                        data.history.forEach(item => proteinHistory.push(item));
+                    } else {
+                        // Si les données sont pour un autre jour, réinitialiser
+                        resetProtein();
+                    }
+                }
+            }
+            
+            function resetProtein() {
+                if (confirm('Voulez-vous vraiment réinitialiser le compteur de protéines pour aujourd\'hui?')) {
+                    proteinTotal = 0;
+                    proteinHistory.length = 0;
+                    updateProteinProgress();
+                    saveProteinData();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
